@@ -6,10 +6,7 @@
   "main": "index.js",
   "author": "Dominik Ferber <dominik.ferber+npm@gmail.com> (http://dferber.de/)",
   "license": "MIT",
-  "scripts": {
-    "prisma": "prisma"
-  },
   "devDependencies": {
-    "prisma-cli": "1.0.9"
+    "prisma": "1.24.0"
   }
 }
