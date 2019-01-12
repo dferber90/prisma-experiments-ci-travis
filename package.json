@@ -4,12 +4,5 @@
   "version": "1.0.0",
   "main": "index.js",
   "author": "Dominik Ferber <dominik.ferber+npm@gmail.com> (http://dferber.de/)",
-  "license": "MIT",
-  "scripts": {
-    "start": "node -r dotenv/config index.js"
-  },
-  "dependencies": {
-    "graphql-yoga": "1.16.9",
-    "prisma-client-lib": "1.24.0"
-  }
+  "license": "MIT"
 }
