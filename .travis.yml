@@ -11,10 +11,19 @@ cache:
   directories:
     - node_modules
 
+before_install:
+  - export PATH="$(yarn global bin):$PATH"
+  - yarn global add prisma-cli
+
 script:
   - echo Hello
   - echo $TRAVIS_PULL_REQUEST
   - echo $TRAVIS_PULL_REQUEST_BRANCH
+  - |
+    pushd prisma-services/dev
+    prisma deploy
+    popd
+
 # script:
 #   - cd continuous
 #   # parse henry.ymal to read prismaServer address
