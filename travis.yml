@@ -1,0 +1,17 @@
+script:
+  - cd continuous
+  # parse henry.ymal to read prismaServer address
+  # parse prisma.yml to read app name
+  # read git branch
+  - export PRISMA_ENDPOINT=<henry:prismaServer>/my-app/<stage/branch>
+  # deploy schema
+  - prisma deploy
+  # create prisma-client (can also be hook of deploy script)
+  - prisma generate
+
+  # back to root project
+  - cd ..
+  # create GraphQL server
+  - yarn build
+  # deploy GraphQL server
+  - serverless deploy dist
