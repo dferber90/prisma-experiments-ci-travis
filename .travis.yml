@@ -32,4 +32,7 @@ script:
   # prisma-client
 
   # deploy GraphQL server
-  - yarn deploy --stage branch1
+  # we use the pr number for the stage, as
+  #  - the AWS stage may only use a-zA-Z0-9
+  #  - the AWS roleName must have 64 chars max
+  - yarn deploy --stage $TRAVIS_PULL_REQUEST
