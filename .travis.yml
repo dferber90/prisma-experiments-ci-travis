@@ -17,21 +17,12 @@ before_install:
 
 script:
   - pushd prisma-services/continuous
+  # set PRISMA_ENDPOINT for "prisma deploy"
   - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_PULL_REQUEST_BRANCH"
-  - echo $PRISMA_ENDPOINT
   - prisma deploy
   - popd
-# script:
-#   - cd continuous
-#   # parse henry.ymal to read prismaServer address
-#   # parse prisma.yml to read app name
-#   # read git branch
-#   - export PRISMA_ENDPOINT=<henry:prismaServer>/my-app/<stage/branch>
-#   # deploy schema
-#   - prisma deploy
-#   # create prisma-client (can also be hook of deploy script)
-#   - prisma generate
-
+  # prisma deployment has a hook which will generate an appropriate
+  # prisma-client
 #   # back to root project
 #   - cd ..
 #   # create GraphQL server

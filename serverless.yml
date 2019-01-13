@@ -1,0 +1,28 @@
+service: ci-travis-example
+
+plugins:
+  - serverless-offline
+
+# only necessary for serverless platform, and optional
+app: henry-example-app
+tenant: dferber90
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+
+functions:
+  graphql:
+    handler: handler.server
+    events:
+      - http:
+          path: /
+          method: post
+          cors: true
+  playground:
+    handler: handler.playground
+    events:
+      - http:
+          path: /
+          method: get
+          cors: true
