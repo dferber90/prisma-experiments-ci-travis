@@ -10,6 +10,9 @@ tenant: dferber90
 provider:
   name: aws
   runtime: nodejs8.10
+  # This is different for each developer
+  # It specifies the profile to use from ~/.aws/credentials
+  profile: default
 
 functions:
   graphql:

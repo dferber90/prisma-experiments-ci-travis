@@ -23,9 +23,6 @@ script:
   - popd
   # prisma deployment has a hook which will generate an appropriate
   # prisma-client
-#   # back to root project
-#   - cd ..
-#   # create GraphQL server
-#   - yarn build
-#   # deploy GraphQL server
-#   - serverless deploy dist
+
+  # deploy GraphQL server
+  - yarn deploy
