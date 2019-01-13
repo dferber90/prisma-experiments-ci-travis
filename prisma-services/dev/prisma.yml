@@ -1,4 +1,5 @@
-endpoint: https://eu1.prisma.sh/ci-test/my-app/dev
+# endpoint: https://eu1.prisma.sh/ci-test/my-app/dev
+endpoint: http://prisma-server.dferber.de:4466/my-app/dev
 datamodel: ../datamodel.prisma
 
 generate:
