@@ -16,9 +16,9 @@ before_install:
   - yarn global add prisma
 
 script:
-  - echo $TRAVIS_PULL_REQUEST
-  - echo $TRAVIS_PULL_REQUEST_BRANCH
-  - pushd prisma-services/dev
+  - pushd prisma-services/continuous
+  - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_PULL_REQUEST_BRANCH"
+  - echo $PRISMA_ENDPOINT
   - prisma deploy
   - popd
 # script:
