@@ -32,4 +32,4 @@ script:
   # prisma-client
 
   # deploy GraphQL server
-  - yarn deploy
+  - yarn deploy --stage branch1
