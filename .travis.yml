@@ -12,6 +12,11 @@ cache:
     - node_modules
 
 before_install:
+  # install specific version of yarn, as the one provided by Travis does not
+  # support pinning package versions yet (using "resolutions" property in
+  # package.json)
+  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.13.0
+  # make prisma available
   - export PATH="$(yarn global bin):$PATH"
   - yarn global add prisma
 
