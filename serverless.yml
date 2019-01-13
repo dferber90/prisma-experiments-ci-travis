@@ -12,6 +12,8 @@ tenant: dferber90
 provider:
   name: aws
   runtime: nodejs8.10
+  environment:
+    PRISMA_ENDPOINT: ${env:PRISMA_ENDPOINT}
 
 functions:
   graphql:

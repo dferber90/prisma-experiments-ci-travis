@@ -8,7 +8,7 @@
   "license": "MIT",
   "scripts": {
     "starter": "serverless offline",
-    "start": "nodemon --quiet --exec 'serverless offline'",
+    "start": "PRISMA_ENDPOINT='' nodemon --quiet --exec 'serverless offline'",
     "deploy": "serverless deploy"
   },
   "dependencies": {
