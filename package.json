@@ -7,7 +7,7 @@
     "graphql-server"
   ],
   "scripts": {
-    "start": "yarn workspace frontend start",
+    "start": "yarn workspace frontend dev",
     "gs:start": "yarn workspace graphql-server start",
     "gs:deploy": "yarn workspace graphql-server deploy",
     "fe:build": "yarn workspace frontend build",
