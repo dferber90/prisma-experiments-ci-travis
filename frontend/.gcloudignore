@@ -13,12 +13,6 @@
 .git
 .gitignore
 
-# Node.js dependencies:
 node_modules/
-frontend/node_modules/
-node_modules
 
-# custom
-graphql-server
-scripts
-keys
+src/
