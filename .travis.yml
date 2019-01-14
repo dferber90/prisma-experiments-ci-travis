@@ -51,7 +51,7 @@ deploy:
   project: henry-228416
   service: default
   # version: <i would like to use the branch name here>
-  # version: $TRAVIS_PULL_REQUEST_BRANCH
+  version: "$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER"
   # depends on whether this is production, staging or branch deployment
   no_promote: true
   # depends on whether this is production, staging or branch deployment
