@@ -14,7 +14,7 @@ cache:
 before_install:
   # decrypt Google App Engine client secret
   - openssl aes-256-cbc -K $encrypted_fcdc1e9b32f5_key -iv $encrypted_fcdc1e9b32f5_iv
-    -in gae-client-secret.json.enc -out gae-client-secret.json -d
+    -in keys/gae-client-secret.json.enc -out keys/gae-client-secret.json -d
   # install specific version of yarn, as the one provided by Travis does not
   # support pinning package versions yet (using "resolutions" property in
   # package.json)
@@ -43,15 +43,19 @@ script:
 # https://docs.travis-ci.com/user/deployment/google-app-engine/
 deploy:
   provider: gae
-  config: app.yaml
+  config: frontend/app.yaml
   # is decrypted by script in before_install
-  keyfile: gae-client-secret.json
+  keyfile: keys/gae-client-secret.json
   # even though the project is contained in the gae-client-secret,
   # we need to specify it as gcloud will use the repo name otherwise
   project: henry-228416
   service: default
-  # version: <i would like to use the branch name here>
-  version: "$TRAVIS_BRANCH-$TRAVIS_BUILD_NUMBER"
+  # Ein Name kann Zahlen, Buchstaben und Bindestriche enthalten.
+  # Er darf höchstens 63 Zeichen lang sein und darf nicht mit einem Bindestrich
+  # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
+  # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
+  # Versionen.
+  # version: "$TRAVIS_BUILD_NUMBER"
   # depends on whether this is production, staging or branch deployment
   no_promote: true
   # depends on whether this is production, staging or branch deployment

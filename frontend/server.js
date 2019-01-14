@@ -2,10 +2,7 @@ const http = require("http");
 const port = 8080;
 
 const requestHandler = (request, response) => {
-  console.log(request.url);
-  response.end(
-    "Hello Node.js Server!\nGraphQL Endpoint: " + process.env.GRAPHQL_ENDPOINT
-  );
+  response.end("Hello Node.js Server!\nGraphQL Endpoint: " + process.cwd());
 };
 
 const server = http.createServer(requestHandler);

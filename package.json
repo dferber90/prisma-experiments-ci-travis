@@ -6,9 +6,9 @@
     "graphql-server"
   ],
   "scripts": {
-    "start": "node server.js",
+    "start": "exit 0",
     "gs:start": "yarn workspace graphql-server start",
     "gs:deploy": "yarn workspace graphql-server deploy",
-    "fe:start": "node server.js"
+    "fe:start": "yarn start"
   }
 }
