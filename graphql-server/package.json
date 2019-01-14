@@ -1,0 +1,23 @@
+{
+  "name": "graphql-server",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "nodemon --quiet --exec 'serverless offline'",
+    "deploy": "serverless deploy"
+  },
+  "dependencies": {
+    "graphql": "^14.0.2",
+    "graphql-yoga": "1.16.9",
+    "prisma-client-lib": "1.24.0"
+  },
+  "devDependencies": {
+    "nodemon": "1.18.9",
+    "prisma": "1.24.0",
+    "serverless": "1.36.0",
+    "serverless-offline": "3.32.2"
+  },
+  "resolutions": {
+    "graphql": "14.0.2"
+  }
+}
