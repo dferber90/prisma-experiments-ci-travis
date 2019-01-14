@@ -16,3 +16,6 @@
 node_modules/
 
 src/
+
+# explicitly include build as it is excluded by gitignore
+!build/*
