@@ -6,14 +6,13 @@
 // #   static_files: build/public/\1
 // #   upload: static/.*\.(gif|png|jpg)$
 
-// - url: /.*
-//   secure: always
-//   redirect_http_response_code: 301
-//   script: auto
-
 console.log(`runtime: nodejs10
 
 handlers:
 - url: /static
   static_dir: build/public/static
+- url: /.*
+  secure: always
+  redirect_http_response_code: 301
+  script: auto
 `);
