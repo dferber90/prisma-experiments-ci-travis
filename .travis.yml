@@ -12,6 +12,9 @@ cache:
     - node_modules
 
 before_install:
+  # decrypt Google App Engine client secret
+  - openssl aes-256-cbc -K $encrypted_fcdc1e9b32f5_key -iv $encrypted_fcdc1e9b32f5_iv
+    -in gae-client-secret.json.enc -out gae-client-secret.json -d
   # install specific version of yarn, as the one provided by Travis does not
   # support pinning package versions yet (using "resolutions" property in
   # package.json)
@@ -36,3 +39,25 @@ script:
   - yarn gs:deploy --stage $TRAVIS_PULL_REQUEST |tee serverless-deployment.log
   - export GRAPHQL_ENDPOINT="$(cat serverless-deployment.log | grep GET | sed s/\ *GET\ -\ *//g)"
   - echo $GRAPHQL_ENDPOINT
+
+# https://docs.travis-ci.com/user/deployment/google-app-engine/
+deploy:
+  provider: gae
+  config: app.yaml
+  # is decrypted by script in before_install
+  keyfile: gae-client-secret.json
+  # even though the project is contained in the gae-client-secret,
+  # we need to specify it as gcloud will use the repo name otherwise
+  project: henry-228416
+  service: default
+  # version: <i would like to use the branch name here>
+  # version: $TRAVIS_PULL_REQUEST_BRANCH
+  # depends on whether this is production, staging or branch deployment
+  no_promote: true
+  # depends on whether this is production, staging or branch deployment
+  no_stop_previous_version: true
+  # not sure whether this is needed
+  skip_cleanup: true
+  # deploy from all branches
+  on:
+    all_branches: true
