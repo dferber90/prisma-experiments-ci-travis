@@ -1,5 +1,22 @@
 generated
 node_modules
-later
 .serverless
 gae-client-secret.json
+build
+frontend-simple
+frontend/app.yaml
+
+# razzle
+logs
+*.log
+npm-debug.log*
+.DS_Store
+
+coverage
+node_modules
+build
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+

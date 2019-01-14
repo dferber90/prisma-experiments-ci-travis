@@ -3,12 +3,14 @@
   "private": true,
   "repository": "git@github.com:dferber90/prisma-experiments-ci-travis.git",
   "workspaces": [
+    "frontend",
     "graphql-server"
   ],
   "scripts": {
-    "start": "exit 0",
+    "start": "yarn workspace frontend start",
     "gs:start": "yarn workspace graphql-server start",
     "gs:deploy": "yarn workspace graphql-server deploy",
-    "fe:start": "yarn start"
+    "fe:build": "yarn workspace frontend build",
+    "fe:start": "yarn workspace frontend start"
   }
 }

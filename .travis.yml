@@ -39,6 +39,7 @@ script:
   - yarn gs:deploy --stage $TRAVIS_PULL_REQUEST |tee serverless-deployment.log
   - export GRAPHQL_ENDPOINT="$(cat serverless-deployment.log | grep GET | sed s/\ *GET\ -\ *//g)"
   - echo $GRAPHQL_ENDPOINT
+  - node scripts/generate-app-yaml.js > frontend/app.yaml
 
 # https://docs.travis-ci.com/user/deployment/google-app-engine/
 deploy:
