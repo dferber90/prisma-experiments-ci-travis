@@ -14,7 +14,7 @@
     "fe:start": "yarn workspace frontend start"
   },
   "devDependencies": {
-    "lodash": "4.17.11",
-    "yaml": "1.2.0"
+    "lodash": "^4.0.0",
+    "yaml": "^1.0.0"
   }
 }
