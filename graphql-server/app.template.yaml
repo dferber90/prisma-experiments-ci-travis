@@ -3,4 +3,5 @@ runtime: nodejs10
 service: graphql-server
 
 env_variables:
-  PRISMA_ENDPOINT: "http://prisma-server.dferber.de:4466/my-app/dev"
+  PRISMA_ENDPOINT: ${env:PRISMA_ENDPOINT}
+  PRISMA_SERVICE_SECRET: ${env:PRISMA_SERVICE_SECRET}

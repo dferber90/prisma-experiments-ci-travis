@@ -53,7 +53,7 @@ script:
     echo $GRAPHQL_ENDPOINT
 
   # generate client and deploy prisma schema (uses PRISMA_ENDPOINT)
-  - "pushd graphql-server/prisma-services/continuous; prisma deploy; popd"
+  - "pushd graphql-server/prisma-services; prisma deploy --json; popd"
 
   # build graphql-server (requires generated prisma client)
   - node scripts/generate-app-yaml.js graphql-server/app.template.yaml graphql-server/app.yaml

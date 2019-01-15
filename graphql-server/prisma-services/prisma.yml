@@ -1,11 +1,13 @@
 # This file can be used with the Prisma CLI to communicate
 # with any of your Prisma Services
 endpoint: ${env:PRISMA_ENDPOINT}
-datamodel: ../datamodel.prisma
+secret: ${env:PRISMA_SERVICE_SECRET}
+
+datamodel: ./datamodel.prisma
 
 generate:
   - generator: javascript-client
-    output: ../../generated/prisma-client/
+    output: ../generated/prisma-client/
 
 hooks:
   post-deploy:
