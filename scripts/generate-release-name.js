@@ -1,8 +1,6 @@
 // Adapted from
 // https://github.com/thedeveloper/sillyname
 
-var defaultPlayerName = "Player Name";
-
 var adjectives = [
   "Black",
   "White",

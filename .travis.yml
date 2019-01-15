@@ -33,20 +33,24 @@ script:
 
   # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
   # We should be able to have RELEASE_NAME be "dev" / "production" as well
+  # a-zA-Z0-9 and dashes, but may not start with a dash
+  # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
   - export RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
 
   # next stage
-  - export PRISMA_STAGE="$RELEASE_NAME"
-  - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$PRISMA_STAGE"
-  # where frontend deploys to
-  - export FRONTEND_ENDPOINT="$RELEASE_NAME-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
-  # where graphql-service deploys to
-  - export GRAPHQL_ENDPOINT="$RELEASE_NAME-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+  - |
+    export PRISMA_STAGE="$RELEASE_NAME"
+    export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$PRISMA_STAGE"
+    # where frontend deploys to
+    export FRONTEND_ENDPOINT="$RELEASE_NAME-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+    # where graphql-service deploys to
+    export GRAPHQL_ENDPOINT="$RELEASE_NAME-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
 
   # log for sanity
-  - echo $PRISMA_ENDPOINT # used by "prisma deploy" & "prisma generate"
-  - echo $FRONTEND_ENDPOINT
-  - echo $GRAPHQL_ENDPOINT
+  - |
+    echo $PRISMA_ENDPOINT # used by "prisma deploy" & "prisma generate"
+    echo $FRONTEND_ENDPOINT
+    echo $GRAPHQL_ENDPOINT
 
   # generate client and deploy prisma schema (uses PRISMA_ENDPOINT)
   - "pushd graphql-server/prisma-services/continuous; prisma deploy; popd"
