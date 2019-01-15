@@ -1,4 +1,6 @@
 runtime: nodejs10
 
+service: graphql-server
+
 env_variables:
   PRISMA_ENDPOINT: "http://prisma-server.dferber.de:4466/my-app/dev"

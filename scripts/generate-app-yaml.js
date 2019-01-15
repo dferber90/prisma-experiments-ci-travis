@@ -11,6 +11,8 @@
 
 console.log(`runtime: nodejs10
 
+service: default
+
 handlers:
   - url: /static
     static_dir: build/public/static

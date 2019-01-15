@@ -50,7 +50,6 @@ deploy:
     # even though the project is contained in the gae-client-secret,
     # we need to specify it as gcloud will use the repo name otherwise
     project: henry-228416
-    service: default
     # Ein Name kann Zahlen, Buchstaben und Bindestriche enthalten.
     # Er darf höchstens 63 Zeichen lang sein und darf nicht mit einem Bindestrich
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
@@ -73,7 +72,6 @@ deploy:
     # even though the project is contained in the gae-client-secret,
     # we need to specify it as gcloud will use the repo name otherwise
     project: henry-228416
-    service: graphql-server
     # Ein Name kann Zahlen, Buchstaben und Bindestriche enthalten.
     # Er darf höchstens 63 Zeichen lang sein und darf nicht mit einem Bindestrich
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
