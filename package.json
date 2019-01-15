@@ -16,6 +16,7 @@
     "fe:start": "yarn workspace frontend start"
   },
   "devDependencies": {
+    "deep-map": "1.5.0",
     "lodash": "^4.0.0",
     "yaml": "^1.0.0"
   }

@@ -8,59 +8,33 @@
 const fs = require("fs");
 const yaml = require("yaml");
 const _ = require("lodash");
+const deepMap = require("deep-map");
 
 // const variableSyntax = RegExp("\\${([ ~:a-zA-Z0-9._'\",\\-\\/\\(\\)]+?)}", "g");
 // uppercase letters, digits, underscore and do not begin with a digit
-const envSyntax = /^\${env:([a-zA-Z_][a-zA-Z0-9_]*)}/g;
+const envSyntax = str => /^\${env:([a-zA-Z_][a-zA-Z0-9_]*)}/g.exec(str);
 
 const sourceFile = process.argv[2];
 const outputFile = process.argv[3];
 
 const source = fs.readFileSync(sourceFile, "utf8");
-
 const content = yaml.parse(source);
 
-const deepMapValues = (object, callback, propertyPath) => {
-  const deepMapValuesIteratee = (value, key) =>
-    deepMapValues(
-      value,
-      callback,
-      propertyPath ? propertyPath.concat(key) : [key]
+const mapped = deepMap(content, (property, propertyPath) => {
+  if (typeof property !== "string") return property;
+
+  const matches = envSyntax(property);
+  if (!matches) return property;
+
+  const envVarName = matches[1];
+  const isDefined = process.env.hasOwnProperty(envVarName);
+  if (!isDefined) {
+    const p = propertyPath.join(".");
+    console.warn(
+      `Tried to replace "${property}" in "${p}" but env var ${envVarName} is not set. Falling back to empty string.`
     );
-  if (_.isArray(object)) {
-    return _.map(object, deepMapValuesIteratee);
-  } else if (
-    _.isObject(object) &&
-    !_.isDate(object) &&
-    !_.isRegExp(object) &&
-    !_.isFunction(object)
-  ) {
-    return _.extend({}, object, _.mapValues(object, deepMapValuesIteratee));
   }
-  return callback(object, propertyPath);
-};
+  return isDefined ? process.env[envVarName] : "";
+});
 
-const envRefSyntax = /^env:/g;
-const replace = objectToPopulate => {
-  const clone = _.clone(objectToPopulate);
-  deepMapValues(clone, (property, propertyPath) => {
-    if (typeof property === "string") {
-      const matches = envSyntax.exec(property);
-      if (matches) {
-        const envVarName = matches[1];
-        const isDefined = process.env.hasOwnProperty(envVarName);
-        if (!isDefined) {
-          const p = propertyPath.join(".");
-          console.warn(
-            `Tried to replace "${property}" in "${p}" but env var ${envVarName} is not set. Falling back to empty string.`
-          );
-        }
-        _.set(clone, propertyPath, isDefined ? process.env[envVarName] : "");
-      }
-      //
-    }
-  });
-  return clone;
-};
-
-fs.writeFileSync(outputFile, yaml.stringify(replace(content)), "utf8");
+fs.writeFileSync(outputFile, yaml.stringify(mapped), "utf8");
