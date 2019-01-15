@@ -16,4 +16,7 @@ handlers:
     static_dir: build/public/static
   - url: /.*
     script: auto
+
+env_variables:
+  GRAPHQL_ENDPOINT: '${process.env.GRAPHQL_ENDPOINT}'
 `);

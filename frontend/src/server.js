@@ -6,6 +6,8 @@ import helmet from "koa-helmet";
 import serve from "koa-static";
 import Router from "koa-router";
 import { renderToString } from "react-dom/server";
+import serialize from "serialize-javascript";
+import * as runtimeConfig from "./config";
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -31,23 +33,24 @@ router.get(
     <!doctype html>
       <html lang="">
       <head>
-          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-          <meta charset="utf-8" />
-          <title>Welcome to Razzle + Koa</title>
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          ${
-            assets.client.css
-              ? `<link rel="stylesheet" href="${assets.client.css}">`
-              : ""
-          }
-          ${
-            process.env.NODE_ENV === "production"
-              ? `<script src="${assets.client.js}" defer></script>`
-              : `<script src="${assets.client.js}" defer crossorigin></script>`
-          }
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta charset="utf-8" />
+        <title>Welcome to Razzle + Koa</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        ${
+          assets.client.css
+            ? `<link rel="stylesheet" href="${assets.client.css}">`
+            : ""
+        }
       </head>
       <body>
-          <div id="root">${ctx.state.markup}</div>
+        <div id="root">${ctx.state.markup}</div>
+        <script>window.env = ${serialize(runtimeConfig)};</script>
+        ${
+          process.env.NODE_ENV === "production"
+            ? `<script src="${assets.client.js}" defer></script>`
+            : `<script src="${assets.client.js}" defer crossorigin></script>`
+        }
       </body>
     </html>`;
   }

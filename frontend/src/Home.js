@@ -1,6 +1,7 @@
-import React from 'react';
-import logo from './react.svg';
-import './Home.css';
+import React from "react";
+import logo from "./react.svg";
+import "./Home.css";
+import { GRAPHQL_ENDPOINT } from "./config";
 
 class Home extends React.Component {
   render() {
@@ -11,9 +12,10 @@ class Home extends React.Component {
           <h2>Welcome to Razzle</h2>
         </div>
         <p className="Home-intro">
-          To get started, edit <code>src/App.js</code> or{' '}
+          To get started, edit <code>src/App.js</code> or{" "}
           <code>src/Home.js</code> and save to reload.
         </p>
+        <p>Endoint: {GRAPHQL_ENDPOINT}</p>
         <ul className="Home-resources">
           <li>
             <a href="https://github.com/jaredpalmer/razzle">Docs</a>
