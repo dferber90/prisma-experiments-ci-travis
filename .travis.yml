@@ -24,21 +24,38 @@ before_install:
   - yarn global add prisma
 
 script:
-  - pushd graphql-server/prisma-services/continuous
-  # set PRISMA_ENDPOINT for "prisma deploy"
-  - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_BRANCH"
-  - echo $PRISMA_ENDPOINT
-  - prisma deploy
-  - popd
-  # prisma deployment will generate a coupled prisma-client using a hook
+  # configuration
 
-  # build graphql-server
-  # - yarn gs:deploy --stage $TRAVIS_BUILD_ID |tee serverless-deployment.log
+  # constatns
+  # APP_ENGINE_PROJECT_NAME is set on repo creation
+  # PRISMA_SERVER is set on repo creation
+  # PRISMA_SERVICE_NAME is set on repo creation
 
-  # build frontend
-  - export GRAPHQL_ENDPOINT="$(cat serverless-deployment.log | grep GET | sed s/\ *GET\ -\ *//g)"
+  # TODO generate this somehow and ensure it matches all possible restrictions
+  # We should be able to have RELEASE_NAME be "dev" / "production" as well
+  - export RELEASE_NAME="dog"
+
+  # next stage
+  - export PRISMA_STAGE="$RELEASE_NAME"
+  - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$PRISMA_STAGE"
+  # where frontend deploys to
+  - export FRONTEND_ENDPOINT="$RELEASE_NAME-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+  # where graphql-service deploys to
+  - export GRAPHQL_ENDPOINT="$RELEASE_NAME-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+
+  # log for sanity
+  - echo $PRISMA_ENDPOINT # used by "prisma deploy" & "prisma generate"
+  - echo $FRONTEND_ENDPOINT
   - echo $GRAPHQL_ENDPOINT
-  - node scripts/generate-app-yaml.js > frontend/app.yaml
+
+  # generate client and deploy prisma schema (uses PRISMA_ENDPOINT)
+  - "pushd graphql-server/prisma-services/continuous; prisma deploy; popd"
+
+  # build graphql-server (requires generated prisma client)
+  # - yarn gs:deploy
+
+  # build frontend (requires GRAPHQL_ENDPOINT)
+  - node scripts/generate-frontend-app-yaml.js > frontend/app.yaml
   - yarn fe:build
 
 # https://docs.travis-ci.com/user/deployment/google-app-engine/
@@ -55,7 +72,7 @@ deploy:
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
     # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
     # Versionen.
-    # version: "$TRAVIS_BUILD_NUMBER"
+    version: $RELEASE_NAME
     # depends on whether this is production, staging or branch deployment
     no_promote: true
     # depends on whether this is production, staging or branch deployment
@@ -77,7 +94,7 @@ deploy:
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
     # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
     # Versionen.
-    # version: "$TRAVIS_BUILD_NUMBER"
+    version: $RELEASE_NAME
     # depends on whether this is production, staging or branch deployment
     no_promote: true
     # depends on whether this is production, staging or branch deployment
