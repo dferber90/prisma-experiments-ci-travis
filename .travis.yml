@@ -24,21 +24,21 @@ before_install:
   - yarn global add prisma
 
 script:
-  # - pushd graphql-server/prisma-services/continuous
-  # # set PRISMA_ENDPOINT for "prisma deploy"
-  # - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_PULL_REQUEST_BRANCH"
-  # - prisma deploy
-  # - popd
-  # # prisma deployment has a hook which will generate an appropriate
-  # # prisma-client
+  - pushd graphql-server/prisma-services/continuous
+  # set PRISMA_ENDPOINT for "prisma deploy"
+  - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_PULL_REQUEST_BRANCH"
+  - prisma deploy
+  - popd
+  # prisma deployment has a hook which will generate an appropriate
+  # prisma-client
 
-  # # deploy GraphQL server
-  # # we use the pr number for the stage, as
-  # #  - the AWS stage may only use a-zA-Z0-9
-  # #  - the AWS roleName must have 64 chars max
-  # - yarn gs:deploy --stage $TRAVIS_PULL_REQUEST |tee serverless-deployment.log
-  # - export GRAPHQL_ENDPOINT="$(cat serverless-deployment.log | grep GET | sed s/\ *GET\ -\ *//g)"
-  # - echo $GRAPHQL_ENDPOINT
+  # deploy GraphQL server
+  # we use the pr number for the stage, as
+  #  - the AWS stage may only use a-zA-Z0-9
+  #  - the AWS roleName must have 64 chars max
+  - yarn gs:deploy --stage $TRAVIS_PULL_REQUEST |tee serverless-deployment.log
+  - export GRAPHQL_ENDPOINT="$(cat serverless-deployment.log | grep GET | sed s/\ *GET\ -\ *//g)"
+  - echo $GRAPHQL_ENDPOINT
   - node scripts/generate-app-yaml.js > frontend/app.yaml
   - yarn fe:build
 
