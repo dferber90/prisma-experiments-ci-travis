@@ -31,9 +31,9 @@ script:
   # PRISMA_SERVER is set on repo creation
   # PRISMA_SERVICE_NAME is set on repo creation
 
-  # TODO generate this somehow and ensure it matches all possible restrictions
+  # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
   # We should be able to have RELEASE_NAME be "dev" / "production" as well
-  - export RELEASE_NAME="dog"
+  - export RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
 
   # next stage
   - export PRISMA_STAGE="$RELEASE_NAME"
