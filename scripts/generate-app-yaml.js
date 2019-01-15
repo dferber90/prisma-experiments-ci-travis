@@ -6,4 +6,14 @@
 // #   static_files: build/public/\1
 // #   upload: static/.*\.(gif|png|jpg)$
 
-console.log(`runtime: nodejs10`);
+// TODO always let user define app.yaml, and we just patch it here by adding
+// the GRAPHQL_ENDPOINT as an env var by amending the existing app.yaml?
+
+console.log(`runtime: nodejs10
+
+handlers:
+  - url: /static
+    static_dir: build/public/static
+  - url: /.*
+    script: auto
+`);

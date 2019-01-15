@@ -16,4 +16,5 @@
 node_modules/
 
 src/
-
+# ignore "public" but not "build/public"
+/public/

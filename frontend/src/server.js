@@ -2,9 +2,10 @@ import App from "./App";
 import React from "react";
 import { StaticRouter } from "react-router-dom";
 import Koa from "koa";
-import { renderToString } from "react-dom/server";
+import helmet from "koa-helmet";
 import serve from "koa-static";
 import Router from "koa-router";
+import { renderToString } from "react-dom/server";
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -14,18 +15,15 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 const router = new Router();
 router.get(
   "/*",
-  async (ctx, next) => {
-    const routingContext = {};
-
+  (ctx, next) => {
+    const context = {};
     const markup = renderToString(
-      <StaticRouter context={routingContext} location={ctx.url}>
+      <StaticRouter context={context} location={ctx.url}>
         <App />
       </StaticRouter>
     );
-
     ctx.state.markup = markup;
-
-    return routingContext.url ? ctx.redirect(routingContext.url) : next();
+    return context.url ? ctx.redirect(context.url) : next();
   },
   ctx => {
     ctx.status = 200;
@@ -38,18 +36,18 @@ router.get(
           <title>Welcome to Razzle + Koa</title>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           ${
+            assets.client.css
+              ? `<link rel="stylesheet" href="${assets.client.css}">`
+              : ""
+          }
+          ${
             process.env.NODE_ENV === "production"
               ? `<script src="${assets.client.js}" defer></script>`
               : `<script src="${assets.client.js}" defer crossorigin></script>`
           }
-          <!-- Render the style tags gathered from the components into the DOM -->
-          ${ctx.state.styleTags}
       </head>
       <body>
           <div id="root">${ctx.state.markup}</div>
-          <script>window.GRAPHQL_ENDPOINT = "${
-            process.env.GRAPHQL_ENDPOINT
-          }";</script> 
       </body>
     </html>`;
   }
@@ -60,8 +58,7 @@ const server = new Koa();
 server
   // `koa-helmet` provides security headers to help prevent common, well known attacks
   // @see https://helmetjs.github.io/
-  // .use(helmet())
-  // .use(cookie())
+  .use(helmet())
   // Serve static files located under `process.env.RAZZLE_PUBLIC_DIR`
   .use(serve(process.env.RAZZLE_PUBLIC_DIR))
   .use(router.routes())
