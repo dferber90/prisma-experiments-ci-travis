@@ -12,5 +12,9 @@
     "gs:deploy": "yarn workspace graphql-server deploy",
     "fe:build": "yarn workspace frontend build",
     "fe:start": "yarn workspace frontend start"
+  },
+  "devDependencies": {
+    "lodash": "4.17.11",
+    "yaml": "1.2.0"
   }
 }

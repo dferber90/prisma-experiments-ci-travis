@@ -56,10 +56,11 @@ script:
   - "pushd graphql-server/prisma-services/continuous; prisma deploy; popd"
 
   # build graphql-server (requires generated prisma client)
+  - node scripts/generate-app-yaml.js graphql-server/app.template.yaml graphql-server/app.yaml
   # - yarn gs:deploy
 
   # build frontend (requires GRAPHQL_ENDPOINT)
-  - node scripts/generate-frontend-app-yaml.js > frontend/app.yaml
+  - node scripts/generate-app-yaml.js frontend/app.template.yaml frontend/app.yaml
   - yarn fe:build
 
 # https://docs.travis-ci.com/user/deployment/google-app-engine/
