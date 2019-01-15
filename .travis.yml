@@ -27,6 +27,7 @@ script:
   - pushd graphql-server/prisma-services/continuous
   # set PRISMA_ENDPOINT for "prisma deploy"
   - export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_BRANCH"
+  - echo $PRISMA_ENDPOINT
   - prisma deploy
   - popd
   # prisma deployment has a hook which will generate an appropriate
