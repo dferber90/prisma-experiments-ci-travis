@@ -1,0 +1,4 @@
+runtime: nodejs10
+
+env_variables:
+  PRISMA_ENDPOINT: "http://prisma-server.dferber.de:4466/my-app/dev"

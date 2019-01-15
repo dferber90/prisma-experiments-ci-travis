@@ -1,9 +1,9 @@
 // https://github.com/prisma/graphql-yoga/tree/master/examples/lambda
 
-const { GraphQLServerLambda } = require("graphql-yoga");
+const { GraphQLServer } = require("graphql-yoga");
 const { prisma } = require("./generated/prisma-client");
 
-const lambda = new GraphQLServerLambda({
+const server = new GraphQLServer({
   typeDefs: "./schema.graphql",
   resolvers: {
     Query: {
@@ -21,5 +21,15 @@ const lambda = new GraphQLServerLambda({
   })
 });
 
-exports.server = lambda.graphqlHandler;
-exports.playground = lambda.playgroundHandler;
+const port = process.env.PORT || 4000;
+
+server.start(
+  {
+    port,
+    cors: {
+      origin: true,
+      credentials: true
+    }
+  },
+  () => console.log(`GraphQL-Server is running on http://localhost:${port}`)
+);

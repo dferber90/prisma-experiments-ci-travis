@@ -30,14 +30,12 @@ script:
   - echo $PRISMA_ENDPOINT
   - prisma deploy
   - popd
-  # prisma deployment has a hook which will generate an appropriate
-  # prisma-client
+  # prisma deployment will generate a coupled prisma-client using a hook
 
-  # deploy GraphQL server
-  # we use the build id for the stage, as
-  #  - the AWS stage may only use a-zA-Z0-9
-  #  - the AWS roleName must have 64 chars max
-  - yarn gs:deploy --stage $TRAVIS_BUILD_ID |tee serverless-deployment.log
+  # build graphql-server
+  # - yarn gs:deploy --stage $TRAVIS_BUILD_ID |tee serverless-deployment.log
+
+  # build frontend
   - export GRAPHQL_ENDPOINT="$(cat serverless-deployment.log | grep GET | sed s/\ *GET\ -\ *//g)"
   - echo $GRAPHQL_ENDPOINT
   - node scripts/generate-app-yaml.js > frontend/app.yaml
@@ -45,26 +43,49 @@ script:
 
 # https://docs.travis-ci.com/user/deployment/google-app-engine/
 deploy:
-  provider: gae
-  config: frontend/app.yaml
-  # is decrypted by script in before_install
-  keyfile: keys/gae-client-secret.json
-  # even though the project is contained in the gae-client-secret,
-  # we need to specify it as gcloud will use the repo name otherwise
-  project: henry-228416
-  service: default
-  # Ein Name kann Zahlen, Buchstaben und Bindestriche enthalten.
-  # Er darf höchstens 63 Zeichen lang sein und darf nicht mit einem Bindestrich
-  # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
-  # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
-  # Versionen.
-  # version: "$TRAVIS_BUILD_NUMBER"
-  # depends on whether this is production, staging or branch deployment
-  no_promote: true
-  # depends on whether this is production, staging or branch deployment
-  no_stop_previous_version: true
-  # not sure whether this is needed
-  skip_cleanup: true
-  # deploy from all branches
-  on:
-    all_branches: true
+  - provider: gae
+    config: frontend/app.yaml
+    # is decrypted by script in before_install
+    keyfile: keys/gae-client-secret.json
+    # even though the project is contained in the gae-client-secret,
+    # we need to specify it as gcloud will use the repo name otherwise
+    project: henry-228416
+    service: default
+    # Ein Name kann Zahlen, Buchstaben und Bindestriche enthalten.
+    # Er darf höchstens 63 Zeichen lang sein und darf nicht mit einem Bindestrich
+    # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
+    # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
+    # Versionen.
+    # version: "$TRAVIS_BUILD_NUMBER"
+    # depends on whether this is production, staging or branch deployment
+    no_promote: true
+    # depends on whether this is production, staging or branch deployment
+    no_stop_previous_version: true
+    # not sure whether this is needed
+    skip_cleanup: true
+    # deploy from all branches
+    on:
+      all_branches: true
+  - provider: gae
+    config: graphql-server/app.yaml
+    # is decrypted by script in before_install
+    keyfile: keys/gae-client-secret.json
+    # even though the project is contained in the gae-client-secret,
+    # we need to specify it as gcloud will use the repo name otherwise
+    project: henry-228416
+    service: graphql-server
+    # Ein Name kann Zahlen, Buchstaben und Bindestriche enthalten.
+    # Er darf höchstens 63 Zeichen lang sein und darf nicht mit einem Bindestrich
+    # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
+    # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
+    # Versionen.
+    # version: "$TRAVIS_BUILD_NUMBER"
+    # depends on whether this is production, staging or branch deployment
+    no_promote: true
+    # depends on whether this is production, staging or branch deployment
+    no_stop_previous_version: true
+    # not sure whether this is needed
+    skip_cleanup: true
+    # deploy from all branches
+    on:
+      all_branches: true

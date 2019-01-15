@@ -3,8 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "nodemon --quiet --exec 'serverless offline'",
-    "deploy": "serverless deploy"
+    "start": "node index.js"
   },
   "dependencies": {
     "graphql": "^14.0.2",
@@ -13,9 +12,7 @@
   },
   "devDependencies": {
     "nodemon": "1.18.9",
-    "prisma": "1.24.0",
-    "serverless": "1.36.1",
-    "serverless-offline": "3.32.2"
+    "prisma": "1.24.0"
   },
   "resolutions": {
     "graphql": "14.0.2"
