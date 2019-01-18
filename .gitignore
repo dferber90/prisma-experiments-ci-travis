@@ -5,6 +5,7 @@ gae-client-secret.json
 build
 frontend-simple
 frontend/app.yaml
+*.code-workspace
 
 # razzle
 logs
