@@ -1,0 +1,22 @@
+{
+  "name": "frontend",
+  "version": "0.0.1",
+  "license": "MIT",
+  "scripts": {
+    "start": "node build/server.js",
+    "dev": "razzle start",
+    "build": "razzle build",
+    "test": "razzle test --env=jsdom"
+  },
+  "dependencies": {
+    "koa": "2.6.2",
+    "koa-helmet": "4.0.0",
+    "koa-router": "7.4.0",
+    "koa-static": "5.0.0",
+    "razzle": "2.4.1",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
+    "react-router-dom": "4.3.1",
+    "serialize-javascript": "1.6.1"
+  }
+}

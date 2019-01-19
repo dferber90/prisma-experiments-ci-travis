@@ -1,0 +1,7 @@
+runtime: nodejs10
+
+service: graphql-server
+
+env_variables:
+  PRISMA_ENDPOINT: ${env:PRISMA_ENDPOINT}
+  PRISMA_SERVICE_SECRET: ${env:PRISMA_SERVICE_SECRET}

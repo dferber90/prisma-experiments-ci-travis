@@ -1,8 +1,23 @@
 {
   "name": "ci-travis",
   "private": true,
-  "version": "1.0.0",
-  "main": "index.js",
-  "author": "Dominik Ferber <dominik.ferber+npm@gmail.com> (http://dferber.de/)",
-  "license": "MIT"
+  "repository": "git@github.com:dferber90/prisma-experiments-ci-travis.git",
+  "workspaces": [
+    "frontend",
+    "graphql-server"
+  ],
+  "scripts": {
+    "start": "yarn workspace frontend dev",
+    "gs:start": "yarn workspace graphql-server start",
+    "gs:dev": "yarn workspace graphql-server dev",
+    "gs:deploy": "yarn workspace graphql-server deploy",
+    "gs:playground": "yarn workspace graphql-server playground",
+    "fe:build": "yarn workspace frontend build",
+    "fe:start": "yarn workspace frontend start"
+  },
+  "devDependencies": {
+    "deep-map": "1.5.0",
+    "lodash": "^4.0.0",
+    "yaml": "^1.0.0"
+  }
 }

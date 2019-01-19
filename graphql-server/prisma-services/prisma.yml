@@ -1,0 +1,25 @@
+# This file can be used with the Prisma CLI to communicate
+# with any of your Prisma Services
+endpoint: ${env:PRISMA_ENDPOINT}
+secret: ${env:PRISMA_SERVICE_SECRET}
+
+datamodel: ./datamodel.prisma
+
+generate:
+  - generator: javascript-client
+    output: ../generated/prisma-client/
+
+hooks:
+  post-deploy:
+    - prisma generate
+
+# Seeds are implicitly executed when deploying a service for the first time
+# (unless explicitly disabled using the --no-seed flag on prisma deploy).
+# https://github.com/prisma/prisma/issues/1536
+# https://github.com/prisma/prisma/issues/1181
+#
+# Right now, the best workflow to "start from scratch" + seeding is this:
+#   prisma seed --reset
+seed:
+  import: ./seed.graphql
+  # run: node script.js

@@ -1,0 +1,12 @@
+runtime: nodejs10
+
+service: default
+
+handlers:
+  - url: /static
+    static_dir: build/public/static
+  - url: /.*
+    script: auto
+
+env_variables:
+  GRAPHQL_ENDPOINT: ${env:GRAPHQL_ENDPOINT}
