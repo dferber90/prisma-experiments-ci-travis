@@ -5,34 +5,34 @@
 # PRISMA_SERVER is set on repo creation
 # PRISMA_SERVICE_NAME is set on repo creation
 
-# testing
-
-echo "TRAVIS_BRANCH $TRAVIS_BRANCH"
-echo "TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST"
-echo "TRAVIS_PULL_REQUEST_BRANCH $TRAVIS_PULL_REQUEST_BRANCH"
-
 # APP_RELEASE_NAME: used as version in app engine deployment
 # PRISMA_ENDPOINT: used as env-var for graphql-server
 
-if [ "$TRAVIS_BRANCH" == "master" ]; then
-  export APP_RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
-  export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/production"
-else
-  # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
-  # We should be able to have APP_RELEASE_NAME be "dev" / "production" as well
-  # a-zA-Z0-9 and dashes, but may not start with a dash
-  # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
-  export APP_RELEASE_NAME="preview-$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
+# validate branch name and skip on invalid names
+if [[ ! $TRAVIS_BRANCH =~ ^[a-z0-9-]+$ ]]; then
+  echo "⚠️ Branch name '$TRAVIS_BRANCH' invalid."
+  echo "Branch names must be lowercase and may only contain a-z, dashes (-) and 0-9"
+  exit 1
+fi
 
-  # next stage
-  # prisma stage depends on branch, so that we can reuse the database
-  export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/preview-$TRAVIS_PULL_REQUEST"
+
+if [ "$TRAVIS_BRANCH" == "master" ]; then
+  export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/production"
   # Deployments need unique names, so we generate one on every ci run
   # However, we can always have
   #  <branch-name>.<project-name>.<customer-name>.plumber.sh
   # pointing towards the latest deployment. Devs should then use that URL
   # instead of directly using the appspot URL.
   # This allows us to migrate traffic
+  # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
+  # We should be able to have APP_RELEASE_NAME be "dev" / "production" as well
+  # a-zA-Z0-9 and dashes, but may not start with a dash
+  # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
+  export APP_RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
+else
+  # prisma stage depends on branch, so that we can reuse the database
+  export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_BRANCH"
+  export APP_RELEASE_NAME="preview-$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
 fi
 
 
