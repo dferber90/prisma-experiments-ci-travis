@@ -5,6 +5,8 @@
 # PRISMA_SERVER is set on repo creation
 # PRISMA_SERVICE_NAME is set on repo creation
 
+# testing
+
 echo $TRAVIS_BRANCH
 echo $TRAVIS_PULL_REQUEST
 echo $TRAVIS_PULL_REQUEST_BRANCH
