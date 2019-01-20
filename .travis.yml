@@ -62,10 +62,12 @@ script:
       #   63 characters. Please verify that the certificate corresponds to the
       #   parent domain of your application when you connect.
       export APP_VERSION="prd-$TRAVIS_BUILD_ID"
+      export PRISMA_SEED="./seed.prod.graphql"
     else
       # prisma stage depends on branch, so that we can reuse the database
       export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_BRANCH"
       export APP_VERSION="prvw-$TRAVIS_BUILD_ID"
+      export PRISMA_SEED="./seed.dev.graphql"
     fi
 
   # where frontend deploys to
