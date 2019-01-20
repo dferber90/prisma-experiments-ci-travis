@@ -1,9 +1,5 @@
 language: node_js
 
-branches:
-  only:
-    - master
-
 node_js:
   - "10"
 
@@ -43,7 +39,7 @@ deploy:
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
     # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
     # Versionen.
-    version: $APP_RELEASE_NAME
+    version: $APP_VERSION
     # depends on whether this is production, staging or branch deployment
     no_promote: true
     # depends on whether this is production, staging or branch deployment
@@ -65,7 +61,7 @@ deploy:
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
     # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
     # Versionen.
-    version: $APP_RELEASE_NAME
+    version: $APP_VERSION
     # depends on whether this is production, staging or branch deployment
     no_promote: true
     # depends on whether this is production, staging or branch deployment

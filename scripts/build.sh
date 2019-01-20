@@ -5,7 +5,7 @@
 # PRISMA_SERVER is set on repo creation
 # PRISMA_SERVICE_NAME is set on repo creation
 
-# APP_RELEASE_NAME: used as version in app engine deployment
+# APP_VERSION: used as version in app engine deployment
 # PRISMA_ENDPOINT: used as env-var for graphql-server
 
 # validate branch name and skip on invalid names
@@ -25,21 +25,21 @@ if [ "$TRAVIS_BRANCH" == "master" ]; then
   # instead of directly using the appspot URL.
   # This allows us to migrate traffic
   # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
-  # We should be able to have APP_RELEASE_NAME be "dev" / "production" as well
+  # We should be able to have APP_VERSION be "dev" / "production" as well
   # a-zA-Z0-9 and dashes, but may not start with a dash
   # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
-  export APP_RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
+  export APP_VERSION="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
 else
   # prisma stage depends on branch, so that we can reuse the database
   export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_BRANCH"
-  export APP_RELEASE_NAME="preview-$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
+  export APP_VERSION="preview-$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
 fi
 
 
 # where frontend deploys to
-export FRONTEND_ENDPOINT="https://$APP_RELEASE_NAME-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+export FRONTEND_ENDPOINT="https://$APP_VERSION-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
 # where graphql-service deploys to
-export GRAPHQL_ENDPOINT="https://$APP_RELEASE_NAME-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+export GRAPHQL_ENDPOINT="https://$APP_VERSION-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
 
 # generate client and deploy prisma schema (uses PRISMA_ENDPOINT)
 pushd graphql-server/prisma-services;
