@@ -7,9 +7,12 @@
 
 # testing
 
-echo $TRAVIS_BRANCH
-echo $TRAVIS_PULL_REQUEST
-echo $TRAVIS_PULL_REQUEST_BRANCH
+echo "TRAVIS_BRANCH $TRAVIS_BRANCH"
+echo "TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST"
+echo "TRAVIS_PULL_REQUEST_BRANCH $TRAVIS_PULL_REQUEST_BRANCH"
+
+# APP_RELEASE_NAME: used as version in app engine deployment
+# PRISMA_ENDPOINT: used as env-var for graphql-server
 
 if [ "$TRAVIS_BRANCH" == "master" ]; then
   export APP_RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
@@ -33,10 +36,6 @@ else
 fi
 
 
-# used as version in app engine deployment
-export APP_RELEASE_NAME
-# used as env-var for graphql-server
-export PRISMA_ENDPOINT
 # where frontend deploys to
 export FRONTEND_ENDPOINT="https://$APP_RELEASE_NAME-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
 # where graphql-service deploys to
