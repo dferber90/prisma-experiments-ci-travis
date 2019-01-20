@@ -23,39 +23,7 @@ before_install:
   - export PATH="$(yarn global bin):$PATH"
   - yarn global add prisma
 
-script:
-  # configuration
-
-  # constatns
-  # APP_ENGINE_PROJECT_NAME is set on repo creation
-  # PRISMA_SERVER is set on repo creation
-  # PRISMA_SERVICE_NAME is set on repo creation
-
-  # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
-  # We should be able to have RELEASE_NAME be "dev" / "production" as well
-  # a-zA-Z0-9 and dashes, but may not start with a dash
-  # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
-  - export RELEASE_NAME="$(node scripts/generate-release-name.js)-$TRAVIS_BUILD_ID"
-
-  # next stage
-  - |
-    export PRISMA_STAGE="$RELEASE_NAME"
-    export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$PRISMA_STAGE"
-    # where frontend deploys to
-    export FRONTEND_ENDPOINT="https://$RELEASE_NAME-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
-    # where graphql-service deploys to
-    export GRAPHQL_ENDPOINT="https://$RELEASE_NAME-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
-
-  # generate client and deploy prisma schema (uses PRISMA_ENDPOINT)
-  - "pushd graphql-server/prisma-services; prisma deploy --json; popd"
-
-  # build graphql-server (requires generated prisma client)
-  - node scripts/generate-app-yaml.js graphql-server/app.template.yaml graphql-server/app.yaml
-  # - yarn gs:deploy
-
-  # build frontend (requires GRAPHQL_ENDPOINT)
-  - node scripts/generate-app-yaml.js frontend/app.template.yaml frontend/app.yaml
-  - yarn fe:build
+script: scripts/build.sh
 
 # https://docs.travis-ci.com/user/deployment/google-app-engine/
 deploy:
@@ -71,7 +39,7 @@ deploy:
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
     # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
     # Versionen.
-    version: $RELEASE_NAME
+    version: $APP_RELEASE_NAME
     # depends on whether this is production, staging or branch deployment
     no_promote: true
     # depends on whether this is production, staging or branch deployment
@@ -93,7 +61,7 @@ deploy:
     # beginnen oder enden. Wählen Sie für jeden Dienst und jede Version einen
     # eindeutigen Namen. Verwenden Sie nicht identische Namen für Dienste und
     # Versionen.
-    version: $RELEASE_NAME
+    version: $APP_RELEASE_NAME
     # depends on whether this is production, staging or branch deployment
     no_promote: true
     # depends on whether this is production, staging or branch deployment
@@ -106,7 +74,6 @@ deploy:
 
 after_script:
   # log for sanity
-  - |
-    echo $PRISMA_ENDPOINT # used by "prisma deploy" & "prisma generate"
-    echo $FRONTEND_ENDPOINT
-    echo $GRAPHQL_ENDPOINT
+  - echo $PRISMA_ENDPOINT # used by "prisma deploy" & "prisma generate"
+  - echo $FRONTEND_ENDPOINT
+  - echo $GRAPHQL_ENDPOINT
