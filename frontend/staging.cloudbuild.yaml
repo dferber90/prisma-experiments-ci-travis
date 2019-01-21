@@ -1,5 +1,5 @@
 steps:
-  - id: "Install node_modules"
+  - id: "Install dependencies"
     name: "gcr.io/cloud-builders/yarn"
     args: ["install"]
   - id: "Yarn Version"
@@ -16,9 +16,6 @@ steps:
   # - id: 'Test'
   #   name: 'gcr.io/cloud-builders/yarn'
   #   args: ['test']
-  - id: "Install Prisma globally"
-    name: "gcr.io/cloud-builders/yarn"
-    args: ["global", "add", "prisma"]
   - id: "Generate app.yaml"
     name: "gcr.io/cloud-builders/nodejs"
     args: ["app.template.yaml", "app.yaml"]

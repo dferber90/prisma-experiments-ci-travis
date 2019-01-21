@@ -1,3 +1,12 @@
+# - name: 'gcr.io/cloud-builders/docker'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     echo "Here's a convenient pattern to use for embedding shell scripts in cloudbuild.yaml."
+#     echo "This step only pushes an image if this build was triggered by a push to master."
+#     [[ "$BRANCH_NAME" == "master" ]] && docker push gcr.io/$PROJECT_ID/image
+
 steps:
   - id: "Install node_modules"
     name: "gcr.io/cloud-builders/yarn"
@@ -16,9 +25,6 @@ steps:
   # - id: 'Test'
   #   name: 'gcr.io/cloud-builders/yarn'
   #   args: ['test']
-  - id: "Install Prisma globally"
-    name: "gcr.io/cloud-builders/yarn"
-    args: ["global", "add", "prisma"]
   - id: "Generate app.yaml"
     name: "gcr.io/cloud-builders/nodejs"
     args: ["app.template.yaml", "app.yaml"]
