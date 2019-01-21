@@ -9,7 +9,7 @@ steps:
     name: "gcr.io/cloud-builders/yarn"
     args: ["global", "add", "prisma"]
   - name: "ubuntu"
-    args: ["source", "./script/get-env-staging.sh"]
+    args: ["source", "./scripts/get-env-staging.sh"]
   # - id: 'Lint'
   #   name: 'gcr.io/cloud-builders/yarn'
   #   args: ['run', 'lint']
