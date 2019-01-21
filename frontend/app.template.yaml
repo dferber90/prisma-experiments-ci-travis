@@ -1,6 +1,7 @@
 runtime: nodejs10
 
-service: default
+# service: default or staging
+service: ${env:APP_ENGINE_FRONTEND_SERVICE}
 
 handlers:
   - url: /static

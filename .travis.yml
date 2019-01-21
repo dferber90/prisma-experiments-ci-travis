@@ -40,40 +40,51 @@ script:
       exit 1
     fi
 
+  # Deployments need unique names, so we generate one on every ci run
+  # However, we can always have
+  #  <branch-name>.<project-name>.<customer-name>.plumber.sh
+  # pointing towards the latest deployment. Devs should then use that URL
+  # instead of directly using the appspot URL.
+  # This allows us to migrate traffic
+  #
+  # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
+  # We should be able to have APP_VERSION be "dev" / "production" as well
+  # a-zA-Z0-9 and dashes, but may not start with a dash
+  # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
+  #
+  # keep short, otherwise we'll see:
+  #   WARNING: This deployment will result in an invalid SSL certificate for
+  #   service [graphql-server]. The total length of your subdomain in the
+  #   format $VERSION_ID-dot-$SERVICE_ID-dot-$APP_ID should not exceed
+  #   63 characters. Please verify that the certificate corresponds to the
+  #   parent domain of your application when you connect.
+  - export APP_VERSION="$TRAVIS_BUILD_ID"
+
   - |
     if [ "$TRAVIS_BRANCH" == "master" ]; then
+      export APP_ENGINE_FRONTEND_SERVICE="default"
+      export APP_ENGINE_GRAPHQL_SERVER_SERVICE="graphql-server"
+
+      # where frontend deploys to
+      export FRONTEND_ENDPOINT="https://$APP_VERSION-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+      # where graphql-service deploys to
+      export GRAPHQL_ENDPOINT="https://$APP_VERSION-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+
       export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/production"
-      # Deployments need unique names, so we generate one on every ci run
-      # However, we can always have
-      #  <branch-name>.<project-name>.<customer-name>.plumber.sh
-      # pointing towards the latest deployment. Devs should then use that URL
-      # instead of directly using the appspot URL.
-      # This allows us to migrate traffic
-      #
-      # Release names may only use [a-zA-Z0-9] and be no longer than 63 chars
-      # We should be able to have APP_VERSION be "dev" / "production" as well
-      # a-zA-Z0-9 and dashes, but may not start with a dash
-      # see https://cloud.google.com/appengine/docs/standard/nodejs/config/appref
-      #
-      # keep short, otherwise we'll see:
-      #   WARNING: This deployment will result in an invalid SSL certificate for
-      #   service [graphql-server]. The total length of your subdomain in the
-      #   format $VERSION_ID-dot-$SERVICE_ID-dot-$APP_ID should not exceed
-      #   63 characters. Please verify that the certificate corresponds to the
-      #   parent domain of your application when you connect.
-      export APP_VERSION="prd-$TRAVIS_BUILD_ID"
       export PRISMA_SEED="./seed.prod.graphql"
     else
+      export APP_ENGINE_FRONTEND_SERVICE="staging"
+      export APP_ENGINE_GRAPHQL_SERVER_SERVICE="graphql-server-staging"
+
+      # where frontend deploys to
+      export FRONTEND_ENDPOINT="https://$APP_VERSION-dot-staging-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+      # where graphql-service deploys to
+      export GRAPHQL_ENDPOINT="https://$APP_VERSION-dot-graphql-server-staging-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
+
       # prisma stage depends on branch, so that we can reuse the database
       export PRISMA_ENDPOINT="$PRISMA_SERVER/$PRISMA_SERVICE_NAME/$TRAVIS_BRANCH"
-      export APP_VERSION="prvw-$TRAVIS_BUILD_ID"
       export PRISMA_SEED="./seed.dev.graphql"
     fi
-
-  # where frontend deploys to
-  - export FRONTEND_ENDPOINT="https://$APP_VERSION-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
-  # where graphql-service deploys to
-  - export GRAPHQL_ENDPOINT="https://$APP_VERSION-dot-graphql-server-dot-$APP_ENGINE_PROJECT_NAME.appspot.com"
 
   # generate client and deploy prisma schema (uses PRISMA_ENDPOINT)
   - "pushd graphql-server/prisma-services; prisma deploy --json; popd"

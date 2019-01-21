@@ -1,6 +1,7 @@
 runtime: nodejs10
 
-service: graphql-server
+# service: graphql-server or graphql-server-staging
+service: ${env:APP_ENGINE_GRAPHQL_SERVER_SERVICE}
 
 env_variables:
   PRISMA_ENDPOINT: ${env:PRISMA_ENDPOINT}
