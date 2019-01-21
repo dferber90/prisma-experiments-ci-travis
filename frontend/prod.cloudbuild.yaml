@@ -1,0 +1,32 @@
+steps:
+  - id: "Install node_modules"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["install"]
+  - id: "Yarn Version"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["--version"]
+  - id: "Install Prisma globally"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["global", "add", "prisma"]
+  - name: "ubuntu"
+    args: ["source", "./script/get-env.sh"]
+  # - id: 'Lint'
+  #   name: 'gcr.io/cloud-builders/yarn'
+  #   args: ['run', 'lint']
+  # - id: 'Test'
+  #   name: 'gcr.io/cloud-builders/yarn'
+  #   args: ['test']
+  - id: "Install Prisma globally"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["global", "add", "prisma"]
+  - id: "Generate app.yaml"
+    name: "gcr.io/cloud-builders/nodejs"
+    args: ["app.template.yaml", "app.yaml"]
+  - id: "Build"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["build"]
+  # - name: "gcr.io/cloud-builders/gcloud"
+  #   dir: "frontend"
+  #   args: ["app", "deploy"]
+
+timeout: "300s"
