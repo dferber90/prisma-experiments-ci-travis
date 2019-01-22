@@ -32,12 +32,12 @@ steps:
 
   - id: "Deploy Prisma schema"
     name: "gcr.io/cloud-builders/yarn"
-    dir: "graphql-server/prisma-services"
     args: ["prisma", "deploy"]
+    dir: "graphql-server/prisma-services"
     env:
-      - "PRISMA_ENDPOINT=$_PRISMA_SERVER/$_PRISMA_SERVICE_NAME/$BRANCH_NAME"
-      - "PRISMA_SERVICE_SECRET=$_PRISMA_SERVICE_SECRET"
-      - "PRISMA_SEED=./seed.dev.graphql"
+      - "PRISMA_ENDPOINT=${_PRISMA_SERVER}/${_PRISMA_SERVICE_NAME}/${BRANCH_NAME}"
+      - "PRISMA_SERVICE_SECRET=${_PRISMA_SERVICE_SECRET}"
+      - 'PRISMA_SEED="./seed.dev.graphql"'
 
   - id: "Generate frontend app.yaml"
     name: "gcr.io/cloud-builders/yarn"
