@@ -1,5 +1,5 @@
 steps:
-  - id: "Install dependencies"
+  - id: "Install node_modules"
     name: "gcr.io/cloud-builders/yarn"
     args: ["install"]
   - id: "Yarn Version"

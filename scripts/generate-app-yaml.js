@@ -29,7 +29,10 @@ const mapped = deepMap(content, (property, propertyPath) => {
   const envVarName = matches[1];
   const isDefined = process.env.hasOwnProperty(envVarName);
   if (!isDefined) {
-    const p = propertyPath.join(".");
+    const p = Array.isArray(propertyPath)
+      ? propertyPath.join(".")
+      : propertyPath;
+
     console.warn(
       `Tried to replace "${property}" in "${p}" but env var ${envVarName} is not set. Falling back to empty string.`
     );
