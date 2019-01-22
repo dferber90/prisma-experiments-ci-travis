@@ -84,4 +84,14 @@ steps:
     dir: "graphql-server"
     args: ["app", "deploy"]
 
-timeout: "300s"
+  - id: "Log overview"
+    name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        echo "Frontend https://$SHORT_SHA-dot-$_APP_ENGINE_FRONTEND_SERVICE-dot-$PROJECT_ID.appspot.com"
+        echo "GraphQL Server https://$SHORT_SHA-dot-$_APP_ENGINE_GRAPHQL_SERVER_SERVICE-dot-$PROJECT_ID.appspot.com"
+        echo "Prisma Endpiont http://$_PRISMA_SERVER/$_PRISMA_SERVICE_NAME/$BRANCH_NAME"
+
+timeout: "600s"
