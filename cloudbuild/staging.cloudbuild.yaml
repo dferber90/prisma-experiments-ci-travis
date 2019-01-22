@@ -31,11 +31,9 @@ steps:
       - "GRAPHQL_ENDPOINT=https://$SHORT_SHA-dot-graphql-server-staging-dot-$PROJECT_ID.appspot.com"
 
   - id: "Deploy Prisma schema"
-    name: "gcr.io/cloud-builders/docker"
-    entrypoint: "bash"
-    args:
-      - "-c"
-      - "pushd graphql-server/prisma-services; yarn prisma deploy --json; popd"
+    name: "gcr.io/cloud-builders/yarn"
+    dir: "graphql-server/prisma-services"
+    args: ["prisma", "deploy"]
 
   - id: "Generate frontend app.yaml"
     name: "gcr.io/cloud-builders/yarn"
