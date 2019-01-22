@@ -44,6 +44,9 @@ steps:
       - "scripts/generate-app-yaml"
       - "frontend/app.template.yaml"
       - "frontend/app.yaml"
+    env:
+      - "APP_ENGINE_FRONTEND_SERVICE=$_APP_ENGINE_FRONTEND_SERVICE"
+      - "GRAPHQL_ENDPOINT=https://$SHORT_SHA-dot-graphql-server-staging-dot-$PROJECT_ID.appspot.com"
 
   - id: "Generate graphql-server app.yaml"
     name: "gcr.io/cloud-builders/yarn"
