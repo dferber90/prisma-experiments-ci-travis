@@ -1,0 +1,94 @@
+steps:
+  - id: "Check branch name"
+    name: "gcr.io/cloud-builders/yarn"
+    entrypoint: "node"
+    args:
+      - "scripts/check-branch-name.js"
+    env:
+      - "BRANCH_NAME=$BRANCH_NAME"
+
+  - id: "Install dependencies"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["install"]
+    env:
+      # we need development dependencies
+      - "NODE_ENV=development"
+
+  # - id: 'Lint'
+  #   name: 'gcr.io/cloud-builders/yarn'
+  #   args: ['run', 'lint']
+
+  # - id: 'Test'
+  #   name: 'gcr.io/cloud-builders/yarn'
+  #   args: ['test']
+
+  # build frontend (requires GRAPHQL_ENDPOINT)
+  - id: "Build Frontend"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["fe:build"]
+    env:
+      - "NODE_ENV=production"
+      - "GRAPHQL_ENDPOINT=https://$SHORT_SHA-dot-$_APP_ENGINE_GRAPHQL_SERVER_SERVICE-dot-$PROJECT_ID.appspot.com"
+
+  - id: "Deploy Prisma schema"
+    name: "gcr.io/cloud-builders/yarn"
+    args: ["prisma", "deploy"]
+    dir: "graphql-server/prisma-services"
+    env:
+      - "PRISMA_MANAGEMENT_API_SECRET=$_PRISMA_MANAGEMENT_API_SECRET"
+      - "PRISMA_ENDPOINT=${_PRISMA_SERVER}/${_PRISMA_SERVICE_NAME}/${BRANCH_NAME}"
+      - "PRISMA_SERVICE_SECRET=${_PRISMA_SERVICE_SECRET}"
+      - "PRISMA_SEED=./seed.dev.graphql"
+
+  - id: "Generate frontend app.yaml"
+    name: "gcr.io/cloud-builders/yarn"
+    entrypoint: "node"
+    args:
+      - "scripts/generate-app-yaml"
+      - "frontend/app.template.yaml"
+      - "frontend/app.yaml"
+    env:
+      - "APP_ENGINE_FRONTEND_SERVICE=$_APP_ENGINE_FRONTEND_SERVICE"
+      - "GRAPHQL_ENDPOINT=https://$SHORT_SHA-dot-$_APP_ENGINE_GRAPHQL_SERVER_SERVICE-dot-$PROJECT_ID.appspot.com"
+
+  - id: "Generate graphql-server app.yaml"
+    name: "gcr.io/cloud-builders/yarn"
+    entrypoint: "node"
+    args:
+      - "scripts/generate-app-yaml"
+      - "graphql-server/app.template.yaml"
+      - "graphql-server/app.yaml"
+    env:
+      - "APP_ENGINE_GRAPHQL_SERVER_SERVICE=$_APP_ENGINE_GRAPHQL_SERVER_SERVICE"
+      - "PRISMA_ENDPOINT=$_PRISMA_SERVER/$_PRISMA_SERVICE_NAME/$BRANCH_NAME"
+      - "PRISMA_SERVICE_SECRET=$_PRISMA_SERVICE_SECRET"
+
+  - id: "Verify frontend app.yaml"
+    name: "gcr.io/cloud-builders/yarn"
+    entrypoint: "cat"
+    args: ["frontend/app.yaml"]
+
+  - id: "Verify graphql-server app.yaml"
+    name: "gcr.io/cloud-builders/yarn"
+    entrypoint: "cat"
+    args: ["graphql-server/app.yaml"]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    dir: "frontend"
+    args: ["app", "deploy"]
+
+  - name: "gcr.io/cloud-builders/gcloud"
+    dir: "graphql-server"
+    args: ["app", "deploy"]
+
+  - id: "Log overview"
+    name: "gcr.io/cloud-builders/docker"
+    entrypoint: "bash"
+    args:
+      - "-c"
+      - |
+        echo "Frontend https://$SHORT_SHA-dot-$_APP_ENGINE_FRONTEND_SERVICE-dot-$PROJECT_ID.appspot.com"
+        echo "GraphQL Server https://$SHORT_SHA-dot-$_APP_ENGINE_GRAPHQL_SERVER_SERVICE-dot-$PROJECT_ID.appspot.com"
+        echo "Prisma Endpiont http://$_PRISMA_SERVER/$_PRISMA_SERVICE_NAME/$BRANCH_NAME"
+
+timeout: "600s"
