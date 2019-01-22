@@ -1,12 +1,4 @@
 steps:
-  - id: "Check branch name"
-    name: "gcr.io/cloud-builders/yarn"
-    entrypoint: "node"
-    args:
-      - "scripts/check-branch-name.js"
-    env:
-      - "BRANCH_NAME=$BRANCH_NAME"
-
   - id: "Install dependencies"
     name: "gcr.io/cloud-builders/yarn"
     args: ["install"]
@@ -38,7 +30,7 @@ steps:
       - "PRISMA_MANAGEMENT_API_SECRET=$_PRISMA_MANAGEMENT_API_SECRET"
       - "PRISMA_ENDPOINT=${_PRISMA_SERVER}/${_PRISMA_SERVICE_NAME}/${BRANCH_NAME}"
       - "PRISMA_SERVICE_SECRET=${_PRISMA_SERVICE_SECRET}"
-      - "PRISMA_SEED=./seed.dev.graphql"
+      - "PRISMA_SEED=./seed.prod.graphql"
 
   - id: "Generate frontend app.yaml"
     name: "gcr.io/cloud-builders/yarn"
