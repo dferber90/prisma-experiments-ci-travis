@@ -75,11 +75,11 @@ steps:
 
   - name: "gcr.io/cloud-builders/gcloud"
     dir: "frontend"
-    args: ["app", "deploy"]
+    args: ["app", "deploy", "--no-promote"]
 
   - name: "gcr.io/cloud-builders/gcloud"
     dir: "graphql-server"
-    args: ["app", "deploy"]
+    args: ["app", "deploy", "--no-promote"]
 
   - id: "Log overview"
     name: "gcr.io/cloud-builders/docker"
