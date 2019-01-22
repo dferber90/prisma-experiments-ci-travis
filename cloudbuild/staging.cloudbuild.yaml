@@ -38,7 +38,7 @@ steps:
       - "PRISMA_MANAGEMENT_API_SECRET=$_PRISMA_MANAGEMENT_API_SECRET"
       - "PRISMA_ENDPOINT=${_PRISMA_SERVER}/${_PRISMA_SERVICE_NAME}/${BRANCH_NAME}"
       - "PRISMA_SERVICE_SECRET=${_PRISMA_SERVICE_SECRET}"
-      - 'PRISMA_SEED="./seed.dev.graphql"'
+      - "PRISMA_SEED=./seed.dev.graphql"
 
   - id: "Generate frontend app.yaml"
     name: "gcr.io/cloud-builders/yarn"
@@ -62,12 +62,6 @@ steps:
       - "APP_ENGINE_GRAPHQL_SERVER_SERVICE=$_APP_ENGINE_GRAPHQL_SERVER_SERVICE"
       - "PRISMA_ENDPOINT=$_PRISMA_SERVER/$_PRISMA_SERVICE_NAME/$BRANCH_NAME"
       - "PRISMA_SERVICE_SECRET=$_PRISMA_SERVICE_SECRET"
-      # - 'PRISMA_SEED="./seed.dev.graphql"'
-      # - 'PRISMA_ENDPOINT="$_PRISMA_SERVER/$_PRISMA_SERVICE_NAME/$BRANCH_NAME"'
-      # - 'FRONTEND_ENDPOINT="https://$_APP_VERSION-dot-staging-dot-$PROJECT_ID.appspot.com"'
-      # - 'APP_VERSION="$_APP_VERSION"'
-      # - 'PRISMA_SECRET"=$_PRISMA_SECRET"'
-      # - 'APP_ENGINE_GRAPHQL_SERVER_SERVICE="$_APP_ENGINE_GRAPHQL_SERVER_SERVICE"'
 
   - id: "Verify frontend app.yaml"
     name: "gcr.io/cloud-builders/yarn"
