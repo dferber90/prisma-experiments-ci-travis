@@ -1,5 +1,9 @@
 # My Project
 
+This project was used to experiment with branch deployments, with App Engine and with Cloud Build.
+
+The application served here is not a fully featured app. See `razzle-page` instead.
+
 ## Setup
 
 Make sure you have the required env files:

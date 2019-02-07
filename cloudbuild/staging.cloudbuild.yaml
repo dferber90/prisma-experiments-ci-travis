@@ -1,4 +1,16 @@
 steps:
+  # decrypt key
+  # mangle with ssh keys
+  # clone github repo
+  # continue as usual
+  #
+  # the github hook just does all the above for us
+  #
+  # we also need to figure out env vars depending on the repo now
+  - name: "gcr.io/cloud-builders/git"
+    args:
+      - clone
+      - git@github.com:dferber90/prisma-experiments-ci-travis.git
   - id: "Check branch name"
     name: "gcr.io/cloud-builders/yarn"
     entrypoint: "node"
