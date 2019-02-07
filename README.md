@@ -1,4 +1,4 @@
-# My Project
+# My Project :)
 
 This project was used to experiment with branch deployments, with App Engine and with Cloud Build.
 
