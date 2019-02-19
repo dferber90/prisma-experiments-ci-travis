@@ -6,7 +6,8 @@
     "start": "node server.js",
     "dev": "nodemon --quiet --exec 'node -r dotenv/config server.js'",
     "deploy": "prisma deploy --env-file .env",
-    "playground": "prisma playground --env-file .env --port 5000"
+    "playground": "prisma playground --env-file .env --port 4002",
+    "playground:token": "prisma token --env-file .env"
   },
   "dependencies": {
     "graphql": "^14.0.2",
@@ -16,7 +17,7 @@
   "devDependencies": {
     "dotenv": "6.2.0",
     "nodemon": "1.18.9",
-    "prisma": "1.24.0"
+    "prisma": "1.26.6"
   },
   "resolutions": {
     "graphql": "14.0.2"
