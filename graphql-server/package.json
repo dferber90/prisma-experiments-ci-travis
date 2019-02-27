@@ -17,7 +17,7 @@
   "devDependencies": {
     "dotenv": "6.2.0",
     "nodemon": "1.18.9",
-    "prisma": "1.26.6"
+    "prisma": "1.27.3"
   },
   "resolutions": {
     "graphql": "14.0.2"
