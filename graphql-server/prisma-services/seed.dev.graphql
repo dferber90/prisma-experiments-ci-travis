@@ -1,5 +1,5 @@
 mutation {
-  createUser(data: { name: "Daniel Dippner", nickname: "dee" }) {
+  createUser(data: { name: "Daniel Dippner", age: 27 }) {
     id
   }
 }
