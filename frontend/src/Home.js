@@ -10,7 +10,6 @@ class Home extends React.Component {
         <div className="Home-header">
           <img src={logo} className="Home-logo" alt="logo" />
           <h2>Welcome to Seeder!</h2>
-          <p>This is continuous deployment</p>
         </div>
         <p className="Home-intro">
           To get started, edit <code>src/App.js</code> or{" "}
